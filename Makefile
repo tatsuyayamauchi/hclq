@@ -5,7 +5,7 @@ LDFLAGS         = -s -w -X github.com/mattolenik/hclq/cmd.version=${VERSION}
 PROJECT_ROOT    = $(shell cd -P -- '$(shell dirname -- "$0")' && pwd -P)
 DIST            = dist
 IS_PUBLISH      = $(APPVEYOR_REPO_TAG)
-BUILD_CMD       = go build -mod=vendor -ldflags="${LDFLAGS}"
+BUILD_CMD       = go build -ldflags="${LDFLAGS}"
 # Build tools
 GHR             := github.com/tcnksm/ghr
 GO_JUNIT_REPORT := github.com/jstemmer/go-junit-report
@@ -18,7 +18,7 @@ default: build test README.md
 build: dist/hclq
 
 dist/hclq: $(SOURCE)
-	$(BUILD_CMD) -i -gcflags='-N -l' -o dist/hclq
+	$(BUILD_CMD) -gcflags='-N -l' -o dist/hclq
 
 clean:
 	rm -rf dist && mkdir dist
