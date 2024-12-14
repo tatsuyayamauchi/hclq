@@ -76,15 +76,15 @@ dist/hclq-windows-amd64:
 	cd "$(@D)" && shasum -a 256 "$@" >> hclq-shasums
 
 install:
-	go install -mod=vendor-ldflags="${LDFLAGS}"
+	go install -ldflags="${LDFLAGS}"
 
 # GitHub Release Tool
 $(GHR):
-	go install -mod=vendor $(GHR)
+	go install $(GHR)
 
 # Translates Go test results to JUnit XML
 $(GO_JUNIT_REPORT):
-	go install -mod=vendor $(GO_JUNIT_REPORT)
+	go install $(GO_JUNIT_REPORT)
 
 publish: $(GHR) test dist
 	[ -n "$(IS_PUBLISH)" ] && ghr -replace -delete -u "$$GITHUB_USER" ${VERSION} dist/
@@ -96,7 +96,7 @@ README.md: README.md.rb
 
 test: $(GO_JUNIT_REPORT) build
 	@mkdir -p test
-	HCLQ_BIN=$(PROJECT_ROOT)/dist/hclq go test -mod=vendor -v "./..." | tee /dev/tty | go-junit-report > test/TEST.xml
+	HCLQ_BIN=$(PROJECT_ROOT)/dist/hclq go test  -v "./..." | tee /dev/tty | go-junit-report > test/TEST.xml
 
 
 .PHONY: clean install publish test testci
